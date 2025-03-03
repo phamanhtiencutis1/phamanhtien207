@@ -3,6 +3,7 @@ from discord.ext import commands
 import time
 import os
 from dotenv import load_dotenv
+from flask import Flask
 
 load_dotenv()  # Load biến môi trường từ file .env
 
@@ -81,4 +82,20 @@ async def ping(ctx):
     duration = round((end_time - start_time) * 1000)
     await msg.edit(content=f"🏓 Pong! Bot latency: {latency}ms | API response time: {duration}ms")
 
+@bot.command()
+async def settup(ctx):
+    await ctx.send("✅ Bot đã sẵn sàng hoạt động!")
+    await banggia(ctx)  # Chạy lệnh banggia khi bot được setup
+
 bot.run(TOKEN)
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Bot đang hoạt động!"
+
+if __name__ == '__main__':
+    os.system("pip install python-dotenv discord.py Flask")
+    port = int(os.environ.get('PORT', 8080))
+    app.run(host='0.0.0.0', port=port)
